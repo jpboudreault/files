@@ -1,4 +1,4 @@
-var OFFERS = {
+{
   "totalCount": 453,
   "items": [
     {
@@ -30043,47 +30043,4 @@ var OFFERS = {
   "attributes": {
     "objectType": "Collection"
   }
-}
-
-var _ = require('lodash');
-
-console.log(getOffersWithNoPreReq().length);
-console.log(getOffersWithOneLevelPreReq().length);
-console.log(getOffersWithMultiLevelPreReq().length);
-console.log(OFFERS.items.length);
-
-function getOffersWithNoPreReq() {
-    return OFFERS.items.reduce(function(memo, offer) {
-        if (offer.prerequisiteOffers.length == 0){
-            memo.push(offer.id);
-        }
-        return memo;
-    }, []);
-}
-
-function getOffersObjectWithNoPreReq() {
-    return OFFERS.items.reduce(function(memo, offer) {
-        if (offer.prerequisiteOffers.length == 0){
-            memo.push(offer);
-        }
-        return memo;
-    }, []);
-}
-
-function getOffersWithOneLevelPreReq() {
-    var offersWithPreReq = _.difference(OFFERS.items, getOffersObjectWithNoPreReq());
-    return offersWithPreReq.reduce(function(memo, offer) {
-        var hasOneLevelPreReq = offer.prerequisiteOffers.every(function(elt) { return getOffersWithNoPreReq().includes(elt.id) });
-        if (hasOneLevelPreReq) {
-            memo.push(offer.id);
-        }
-        return memo;
-    },[]);
-}
-
-function getOffersWithMultiLevelPreReq() {
-    var offerIds = OFFERS.items.map(function(offer) {
-        return offer.id;
-    });
-    return _.difference(_.difference(offerIds, getOffersWithNoPreReq()), getOffersWithOneLevelPreReq());
 }
